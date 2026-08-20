@@ -241,8 +241,7 @@ const BABAMUL_PUBLIC_ROUTES: &[&str] = &[
     "/babamul/docs",
     "/babamul/stats/nightly",
     "/babamul/stats/collections",
-    "/babamul/stats/kafka",
-    "/babamul/stats/realtime"
+    "/babamul/stats/kafka"
 ];
 
 /// Middleware for authenticating Babamul users
