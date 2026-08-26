@@ -34,7 +34,7 @@ posthog:
   # consumption to users. Also drives the Grafana consumption metrics.
   consumption_interval_seconds: 300
 gpu:
-  enabled: false # Set to true to load ONNX models on GPU (CUDA) instead of CPU.
+  enabled: true # Set to true to load ONNX models on GPU (CUDA) instead of CPU.
   # Models are loaded once at startup and shared across all enrichment workers.
   # When false, models are loaded on CPU (BOOM_GPU__ENABLED env var is still respected).
   device_ids: [0] # CUDA device(s) to use. E.g. [0,1,2,3,4,5,6,7] for 8 GPUs.
@@ -117,6 +117,11 @@ workers:
       n_workers: 8
     enrichment:
       n_workers: 12
+      # Alerts per enrichment batch: the queue RPOP cap AND the fixed ONNX
+      # inference shape. Partial batches are zero-padded so ORT sees one shape
+      # and the GPU memory arena stays stable. 750 is stable for both VRAM => 12GB.
+      # Caltech and MSI can handle 1000.
+      batch_size: 1000
     filter:
       n_workers: 4
       refresh_interval_minutes: 15
